@@ -2,7 +2,10 @@ import express from 'express'
 import cors from 'cors'
 import cookieParser from "cookie-parser"
 import dotenv from 'dotenv'
-import authRouter from './routes/auth.routes.js'
+
+
+import authRoutes from './routes/auth.routes.js'
+import problemRoutes from './routes/problem.routes.js'
 
 dotenv.config({
     path:'./.env'
@@ -18,7 +21,8 @@ app.use(express.urlencoded({extended:true,limit:"16kb"}))
 app.use(cookieParser())
 
 
-app.use("/api/v1/auth",authRouter)
+app.use("/api/v1/auth",authRoutes)
+app.use("/api/v1/problems",problemRoutes)
 
 app.listen(PORT,()=>{
     console.log(`Server listening on ${PORT}`);
