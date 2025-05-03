@@ -52,7 +52,7 @@ res.cookie("jwt",token,{
 
 res.status(200).json(
     new ApiResponse(200,newUser
-    , "user login successfuly")
+    , "user register successfuly")
 )
 
 })
