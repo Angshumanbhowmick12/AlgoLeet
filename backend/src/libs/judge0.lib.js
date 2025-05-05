@@ -46,8 +46,18 @@ const submitBatch= async(submissions)=>{
     
 }
 
+function getLanguageName(languageId){
+    const LANGAUAGE_NAMES={
+        74:"TypeScript",
+        63:"JavaScript",
+        71:"Python",
+        62:"Java",
+    }
+}
+
 export{
     getJudge0LanguageId,
     submitBatch,
     pollBatchResults,
+    getLanguageName
 }
