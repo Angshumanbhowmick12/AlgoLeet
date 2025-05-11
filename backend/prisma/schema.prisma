@@ -74,7 +74,7 @@ model Submission{
   stdin String?
   stdout String?
   stderr String?
-  compilaOutput String?
+  compileOutput String?
   status String // Accepted , worng answer
   memory String?
   time String?
@@ -85,7 +85,7 @@ model Submission{
   user User @relation(fields: [userId],references: [id],onDelete: Cascade)
   problem Problem @relation(fields: [problemId],references: [id],onDelete: Cascade)
 
-  testcases TestCaseResult[]
+  testCases TestCaseResult[]
 }
 
 model TestCaseResult{
@@ -94,7 +94,7 @@ model TestCaseResult{
   testCase Int
   passed Boolean
   stdout String?
-  expexted String
+  expected String
   stderr String?
   compileOutput String?
   status String

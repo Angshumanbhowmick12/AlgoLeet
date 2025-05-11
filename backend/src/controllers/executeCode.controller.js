@@ -118,7 +118,7 @@ const executeCode= asyncHandler(async(req,res)=>{
         }
     ))
 
-    await db.testCaseResults.createMany({
+    await db.testCaseResult.createMany({
         data: testCaseResults,
     })
 
@@ -132,7 +132,7 @@ const executeCode= asyncHandler(async(req,res)=>{
     })
 
     res.status(200).json(
-       new ApiResponse(200,"Code Executed! Successfully!",submissionWithTestcase) 
+       new ApiResponse(200,submissionWithTestcase,"Code Executed! Successfully!") 
     )
 
     
