@@ -1,6 +1,6 @@
-import { asyncHandler } from "../utils/async-handler";
+import { asyncHandler } from "../utils/async-handler.js";
 import { db } from "../libs/db.js";
-import { ApiResponse } from "../utils/api-response";
+import { ApiResponse } from "../utils/api-response.js";
 import { ApiError } from "../utils/api-error.js";
 
 const getAllSubmission = asyncHandler(async(req,res)=>{
