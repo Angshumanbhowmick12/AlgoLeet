@@ -4,15 +4,17 @@ import { asyncHandler } from "../utils/async-handler.js";
 import jwt from "jsonwebtoken"
 
 const authMiddleware = asyncHandler(async(req,res,next)=>{
-    const token= req.cookies.jwt
+    const token= req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "")
 
+    // console.log(req.cookies)
+    
     if (!token) {
         throw new ApiError(402,"unauthorized -no token provided")
     }
     
     let decoded;
 
-    decoded= jwt.verify(token,process.env.JWT_SECRET)
+    decoded= jwt.verify(token,process.env.ACCESS_TOKEN_SECRET)
 
     if (!decoded) {
         throw new ApiError(401,"unauthorized user")
@@ -27,7 +29,7 @@ const authMiddleware = asyncHandler(async(req,res,next)=>{
             image:true,
             name:true,
             email:true,
-            role:true
+            role:true 
         }
     })
 
