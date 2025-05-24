@@ -5,6 +5,9 @@ import { ApiError } from '../utils/api-error.js'
 import { UserRole } from '../generated/prisma/index.js'
 import jwt from 'jsonwebtoken'
 import { ApiResponse } from '../utils/api-response.js'
+import { uploadOnCloudinary } from '../utils/cloudinary.js'
+
+
 
 const generateAccessAndRefreshToken= async(user)=>{
     const accessToken = jwt.sign(
@@ -53,9 +56,22 @@ const register= asyncHandler( async(req,res)=>{
         email
     }
  })
+ 
 
  if (existingUser) {
     throw new ApiError(409,'User already exists')
+ }
+
+ const imageLocalpath= req.file?.path
+
+ if (!imageLocalpath) {
+    throw new ApiError(400,"Image file is required")
+ }
+
+ const image= await uploadOnCloudinary(imageLocalpath,"image")
+
+ if (!image) {
+    throw new ApiError(400,"Error While uploading image on Cloudinary")
  }
 
  const hasedPassword=await bcrypt.hash(password,10);
@@ -65,7 +81,8 @@ const register= asyncHandler( async(req,res)=>{
         email,
         password:hasedPassword,
         name,
-        role:UserRole.USER
+        image:image.url,
+        role:UserRole.USER 
     }
  })
 
@@ -159,13 +176,21 @@ const logout=asyncHandler(async(req,res)=>{
 
 
 const refreshAccessToken = asyncHandler(async(req,res)=>{
-    const incommingRefreshToken = req.cookie?.refreshToken || req.body.refreshToken
+    const incommingRefreshToken = req.cookies?.refreshToken|| req.body.refreshToken
 
     if(!incommingRefreshToken){
         throw new ApiError(401,"Unauthorized request from refresh token")
     }
+    let decodedToken
+    try {
+        decodedToken=jwt.verify(incommingRefreshToken,process.env.REFRESH_TOKEN_SECRET)
 
-    const decodedToken=jwt.verify(incommingRefreshToken,REFRESH_TOKEN_SECRET)
+        console.log(decodedToken);
+        
+    } catch (error) {
+        throw new ApiError("401","Invalid or expired refresh token")
+    }
+    
 
     const user = await db.user.findUnique({
         where:{
@@ -177,12 +202,17 @@ const refreshAccessToken = asyncHandler(async(req,res)=>{
         throw new ApiError(401,"Invalid refresh token")
     }
 
+    console.log(user?.refreshToken);
+    console.log(incommingRefreshToken);
+    
+    
+
     if(incommingRefreshToken !== user?.refreshToken){
         throw new ApiError(401,"Refresh token is expired and used")
     }
 
-    const {accessToken,newAccessToken}=generateAccessAndRefreshToken(user)
-
+    const{accessToken,refreshToken:newAccessToken}= await generateAccessAndRefreshToken(user)
+  
     return res
         .status(200)
         .cookie("accessToken",accessToken,{
@@ -207,12 +237,83 @@ const check=asyncHandler( async(req,res)=>{
      
 })
 
+
+const changeCurrentPassword = asyncHandler(async(req,res)=>{
+    const {oldPassword,newPassword}=req.body
+    
+    const user= await db.user.findUnique({
+        where:{
+            id:req.user.id,
+        }
+    })
+
+    if(!user){
+        throw new ApiError(400,"User Doesn't Exist")
+    }
+
+    const isPasswordCorrect= await bcrypt.compare(oldPassword,user.password)
+
+    if (!isPasswordCorrect) {
+        throw new ApiError(400,"Password Incorrect")
+    }
+
+    const hasedPassword=await bcrypt.hash(newPassword,10)
+
+    const updatedUserPassword = await db.user.update({
+        where:{
+            id:user.id,
+        },
+        data:{
+            password:hasedPassword
+        }
+    })
+
+
+    return res
+    .status(201)
+    .json(
+        new ApiResponse(201,updatedUserPassword,"Password changed successfully")
+    )
+
+})
+
+const updateUserImage = asyncHandler(async(req,res)=>{
+    const imageLocalpath= req.file?.path
+
+    if (!imageLocalpath) {
+        throw new ApiError(401,"Image file is missing")
+    }
+
+    const newimage = await uploadOnCloudinary(imageLocalpath)
+
+    if (!newimage.url) {
+        throw new ApiError(400,"error while uploading on image")
+    }
+
+    const updateduser= await db.user.update({
+        where:{
+            id:req.user.id,
+        },
+        data:{
+            image:newimage.url,
+        }
+    })
+
+    return res  
+        .status(200)
+        .json(
+            new ApiResponse(200,updateduser,"Image updated succesfully")
+        )
+})
+
 export {
     register,
     login,
     logout,
     check,
-    refreshAccessToken
+    refreshAccessToken,
+    changeCurrentPassword,
+    updateUserImage
 }
 
 
