@@ -117,7 +117,7 @@ function reverseList(head) {
         {/* Logo */}
         <div className="flex items-center justify-center mb-6">
           <div className="w-12 h-12 rounded-xl bg-primary/10  flex items-center justify-center">
-            <Code className="w-6 h-6 text-primary" />
+            <Code className="w-6 h-6 text-amber-600" />
           </div>
         </div>
 

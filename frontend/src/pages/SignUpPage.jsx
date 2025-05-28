@@ -6,6 +6,7 @@ import { Code, Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
 
 import { z } from "zod";
 import AuthImagePattern from "../components/AuthImagePattern";
+import { useAuthStore } from "../store/useAuthStore";
 
 const SignUpSchema = z.object({
   email: z.string().email("Enter a valid email"),
@@ -15,7 +16,7 @@ const SignUpSchema = z.object({
 
 const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const {signup,isSigninUp}=useState
+  const { signup ,isSigninUp}= useAuthStore()
 
   const {
     register,
@@ -26,7 +27,13 @@ const SignUpPage = () => {
   });
 
   const onSubmit = async (data) => {
-    console.log(data);
+    try {
+        await signup(data)
+        console.log("SignUp data", data);
+        
+    } catch (error) {
+        console.error("SignUp failed:", error)
+    }
   };
 
   return (
@@ -37,7 +44,7 @@ const SignUpPage = () => {
           <div className="text-center mb-8">
             <div className="flex flex-col items-center gap-2 group">
               <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                <Code className="w-6 h-6 text-primary" />
+                <Code className="w-6 h-6 text-amber-600" />
               </div>
               <h1 className="text-2xl font-bold mt-2">
                 {" "}
@@ -136,7 +143,7 @@ const SignUpPage = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              className="btn btn-primary w-full"
+              className="btn bg-amber-600 w-full"
              disabled={isSigninUp}
             >
                {isSigninUp ? (

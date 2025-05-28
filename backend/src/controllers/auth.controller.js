@@ -50,7 +50,8 @@ const register= asyncHandler( async(req,res)=>{
 
  //console.log(db.user);
  
-
+    console.log("hello from backend");
+    
  const existingUser= await db.user.findUnique({
     where:{
         email
@@ -64,13 +65,11 @@ const register= asyncHandler( async(req,res)=>{
 
  const imageLocalpath= req.file?.path
 
- if (!imageLocalpath) {
-    throw new ApiError(400,"Image file is required")
- }
+
 
  const image= await uploadOnCloudinary(imageLocalpath,"image")
 
- if (!image) {
+ if (imageLocalpath && !image) {
     throw new ApiError(400,"Error While uploading image on Cloudinary")
  }
 
@@ -81,7 +80,7 @@ const register= asyncHandler( async(req,res)=>{
         email,
         password:hasedPassword,
         name,
-        image:image.url,
+        image: imageLocalpath ? image.url : null,
         role:UserRole.USER 
     }
  })
@@ -94,7 +93,7 @@ const register= asyncHandler( async(req,res)=>{
 })
 
 const login= asyncHandler(async(req,res)=>{
-    const {email,password}=req.body;
+    const { email , password }= req.body;
 
     const user=await db.user.findUnique({
         where:{
@@ -232,9 +231,9 @@ const refreshAccessToken = asyncHandler(async(req,res)=>{
 
 const check=asyncHandler( async(req,res)=>{
  res.status(200).json(
-    new ApiResponse(200,"User is Authenticated",req.user)
+    new ApiResponse(200,req.user,"User is Authenticated")
  )
-     
+ 
 })
 
 
