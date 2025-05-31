@@ -8,6 +8,9 @@ import LoginPage from './pages/LoginPage.jsx'
 import SignUpPage from './pages/SignUpPage.jsx'
 import { useAuthStore } from './store/useAuthStore.js'
 import Layout from './layout/Layout.jsx'
+import AdminRoute from './components/AdminRoute.jsx'
+import AddProblem from './pages/AddProblem.jsx'
+import ProblemPage from './pages/ProblemPage.jsx'
  
 
 const App = () => {
@@ -36,23 +39,33 @@ const App = () => {
         <Route path='/' element={<Layout/>}>
 
         <Route
-        index
-        path='/'
-        element={authUser ? <HomePage/> : <Navigate to={"/login"}/>}
+          index
+          path='/'
+          element={authUser ? <HomePage/> : <Navigate to={"/login"}/>}
         />
-
         </Route>
 
 
       
         <Route
-        path='/login'
-        element={!authUser ? <LoginPage/> : <Navigate to={"/"}/>}
+          path='/login'
+          element={!authUser ? <LoginPage/> : <Navigate to={"/"}/>}
         />
         <Route
-        path='/signup'
-        element={!authUser ? <SignUpPage/> : <Navigate to={"/"}/>}
+          path='/signup'
+          element={!authUser ? <SignUpPage/> : <Navigate to={"/"}/>}
         />
+        <Route
+          path='/problem/:id'
+          element={authUser ? <ProblemPage/> : <Navigate to={"/login"}/>}
+        />
+
+        <Route element={<AdminRoute/>}>
+          <Route
+            path='/add-problem'
+            element={authUser ? <AddProblem/> : <Navigate to={"/"}/>}
+          />
+        </Route>
       </Routes>
     </div>
   )

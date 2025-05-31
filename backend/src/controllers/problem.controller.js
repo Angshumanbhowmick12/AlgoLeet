@@ -78,19 +78,29 @@ const createProblem= asyncHandler(async(req,res)=>{
     })
 
     return res.status(201).json(
-        new ApiResponse(201,'Problem created successfully',newProblem)
+        new ApiResponse(201,newProblem,"Problem created Successfully")
     )
 })
 
 const getAllProblems= asyncHandler(async(req,res)=>{
-  const problems= await db.problem.findMany()
+  const problems= await db.problem.findMany(
+    {
+        include:{
+            solvedBy:{
+                where:{
+                    userId:req.user.id
+                }
+            }
+        }
+    }
+  )
 
   if (!problems) {
     throw new ApiError(404,"no problems found")
   }
 
   res.status(200).json(
-    new ApiResponse(200,"Problems Fetched Successfully",problems)
+    new ApiResponse(200,problems,"Problems Fetched Successfully")
   )
 
 })
@@ -109,7 +119,7 @@ const getProblemById= asyncHandler(async(req,res)=>{
    }
 
    res.status(200).json(
-    new ApiResponse(200,"Problem found succesfully",problem)
+    new ApiResponse(200,problem,"Problem found succesfully")
    )
 })
 
@@ -145,7 +155,7 @@ const updateProblem= asyncHandler(async(req,res)=>{
     })
 
     res.status(201).json(
-        new ApiResponse(201,"Problem successfully updated",updatedProblem)
+        new ApiResponse(201,updatedProblem,"Problem successfully updated")
     )
 
 
