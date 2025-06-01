@@ -5,7 +5,7 @@ import toast from "react-hot-toast"
 
 export const useProblemStore= create((set)=>({
     problems:[],
-    problem:null,
+    problem: null ,
     solvedProblems: [],
     isProblemsLoading: false,
     isProblemLoading: false,
@@ -32,7 +32,9 @@ export const useProblemStore= create((set)=>({
             const res = await axiosInstance.get(`/problems/get-problem/${id}`)
             console.log("pi:",res.data.data);
             
-            set({problem:res.data.data})
+            set({ problem : res.data.data})
+            
+            
         } catch (error) {
             console.log("error in getting problems",error);
             toast.error("error in getting problems");
