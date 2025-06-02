@@ -4,26 +4,51 @@ import { ApiResponse } from "../utils/api-response.js";
 import { ApiError } from "../utils/api-error.js";
 
 const createPlaylist = asyncHandler(async(req,res)=>{
-   const {name,description} = req.body
+    const {name,description} = req.body;
 
-   const userId = req.user.id 
+    const userId = req.user.id; // Assuming req.user.id is correctly populated by your auth middleware
 
-   if (!userId) {
-     throw new ApiError(404,"user id is not found")
-   }
+    // --- FIX START ---
 
-   const playList = await db.playlist.create({
+    // 1. Validate input name and description
+    if (!name || name.trim() === "") {
+        throw new ApiError(400, "Playlist name is required");
+    }
+
+    // 2. Ensure userId is available (good existing check)
+    if (!userId) {
+        throw new ApiError(404,"User ID is not found. Please ensure you are logged in.");
+    }
+
+    // 3. Check if a playlist with the same name already exists for this user
+    const existingPlaylist = await db.playlist.findFirst({
+        where: {
+            name: name,
+            userId: userId,
+        },
+    });
+
+    if (existingPlaylist) {
+        // If a playlist with the same name and user ID exists, throw a conflict error
+        throw new ApiError(409, "A playlist with this name already exists for this user.");
+    }
+
+    // --- FIX END ---
+
+    // If no existing playlist found, proceed to create the new playlist
+    const playList = await db.playlist.create({
         data:{
             name,
             description,
             userId,
         }
-   })
+    });
 
-   res.status(200).json(
-    new ApiResponse(200,playList,"Playlist created successfully")
-   )
-})
+    res.status(200).json(
+        new ApiResponse(200, playList, "Playlist created successfully")
+    );
+});
+
 
 const getAllListDetails = asyncHandler(async(req,res)=>{
     const playlist= await db.playlist.findMany({
@@ -79,11 +104,13 @@ const addProblemToPlaylist = asyncHandler(async(req,res)=>{
     }
 
     //create records for each  problem in the playlist
-    const problemsInPlaylist = await db.problemsInPlaylist.createMany({
-        data:problemIds.map((problemId)=>({
+    const problemsInPlaylist = await db.problemInPlaylist.createMany({
+        data:
+         problemIds.map((problemId)=>({
             playlistId,
             problemId,
         }))
+    
     })
 
     res.status(201).json(

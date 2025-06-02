@@ -1,7 +1,11 @@
 import React,{useState,useEffect, useMemo} from 'react'
 import { Link } from 'react-router-dom'
-import { Bookmark,PenLineIcon,Trash,TrashIcon,Plus } from 'lucide-react'
+import { Bookmark,PenLineIcon,Trash,TrashIcon,Plus, Loader2 } from 'lucide-react'
 import { useAuthStore } from '../store/useAuthStore'
+import { useActions } from '../store/useActions'
+import AddToPlaylistModal from "./AddToPlaylist";
+import CreatePlaylistModal from "./CreatePlaylistModal";
+import { usePlaylistStore } from "../store/usePlaylistStore";
 
 const ProblemTable = ({problems}) => {
 
@@ -15,11 +19,15 @@ const ProblemTable = ({problems}) => {
 
     
     
-
+    const {isDeletingProblem,onDeleteProblem}=useActions()
+    const { createPlaylist } = usePlaylistStore();
     const[search,setSearch]=useState("")
     const[difficulty,setDifficulty]=useState("ALL")
     const[selectedTag,setSelectedTag]=useState("ALL")
     const[currentPage,setCurrentPage]=useState(1)
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [isAddToPlaylistModalOpen, setIsAddToPlaylistModalOpen] = useState(false);
+    const [selectedProblemId, setSelectedProblemId] = useState(null);
 
     //Extract all unique tags from problems
     const allTags = useMemo(()=>{
@@ -58,6 +66,19 @@ const ProblemTable = ({problems}) => {
   },[filteredProblems,currentPage])
 
 
+    const handleDelete = (id) => {
+    onDeleteProblem(id);
+  };
+
+  const handleCreatePlaylist = async (data) => {
+    await createPlaylist(data);
+  };
+
+  const handleAddToPlaylist = (problemId) => {
+    setSelectedProblemId(problemId);
+    setIsAddToPlaylistModalOpen(true);
+  };
+
 
   return (
     <div className='w-full max-w-6xl mx-auto mt-10'>
@@ -66,7 +87,7 @@ const ProblemTable = ({problems}) => {
         <h2 className="text-2xl font-bold">Problems</h2>
         <button
           className="btn bg-amber-600 gap-2"
-          onClick={() => {}}
+          onClick={() => setIsCreateModalOpen(true)}
         >
           <Plus className="w-4 h-4" />
           Create Playlist
@@ -178,10 +199,12 @@ const ProblemTable = ({problems}) => {
                         {authUser?.data?.role === "ADMIN" && (
                           <div className="flex gap-2">
                             <button
-                              onClick={() => {}}
+                              onClick={() => handleDelete(problem.id)}
                               className="btn btn-sm btn-error"
                             >
-                              <TrashIcon className="w-4 h-4 text-white" />
+                             {
+                              isDeletingProblem ? <Loader2 className='animate-spin h-4 w-4'/> :  <TrashIcon className="w-4 h-4 text-white cursor-pointer" />
+                             }
                             </button>
                             <button disabled className="btn btn-sm btn-warning">
                               <PenLineIcon className="w-4 h-4 text-white" />
@@ -190,7 +213,7 @@ const ProblemTable = ({problems}) => {
                         )}
                         <button
                           className="btn btn-sm btn-outline flex gap-2 items-center"
-                          onClick={() => {}}
+                          onClick={() => handleAddToPlaylist(problem.id)}
                         >
                           <Bookmark className="w-4 h-4" />
                           <span className="hidden sm:inline">Save to Playlist</span>
@@ -232,6 +255,18 @@ const ProblemTable = ({problems}) => {
           Next
         </button>
       </div>
+       {/* Modals */}
+      <CreatePlaylistModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onSubmit={handleCreatePlaylist}
+      />
+      
+      <AddToPlaylistModal
+        isOpen={isAddToPlaylistModalOpen}
+        onClose={() => setIsAddToPlaylistModalOpen(false)}
+        problemId={selectedProblemId}
+      />
     <div className="absolute bottom-16 right-0 w-1/3 h-1/3 bg-amber-600 opacity-30 blur-3xl rounded-md"></div>
     </div>
   )

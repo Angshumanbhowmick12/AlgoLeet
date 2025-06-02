@@ -21,11 +21,21 @@ import { useProblemStore } from '../store/useProblemStore'
 import { useExecutionStore } from '../store/useExecutionSection'
 import { getLanguageId } from '../lib/lang'
 import Submission from '../components/Submission'
+import SubmissionList from '../components/SubmissionList'
+import { useSubmissionStore } from '../store/useSubmissionStore'
 
 const ProblemPage = () => {
 
     const {id}= useParams();
     const {getProblemById , problem, isProblemLoading}= useProblemStore()
+
+    const{
+      submission:submissions,
+      isLoading:isSubmissionsLoading,
+      getSubmissionForProblem,
+      getSubmissionCountForProblem,
+      submissionCount
+    }=useSubmissionStore()
 
     const [code,setCode]=useState("");
     const [activeTab,setActiveTab] = useState("description");
@@ -37,6 +47,7 @@ const ProblemPage = () => {
 
       useEffect(() => {
         getProblemById(id);
+        getSubmissionCountForProblem(id)
     
       }, [id]);
 
@@ -63,6 +74,15 @@ const ProblemPage = () => {
 
   console.log("pl",problem);
 
+  useEffect(()=>{
+    if (activeTab === "submissions" && id) {
+      getSubmissionForProblem(id)
+    }
+  },[activeTab,id])
+
+  console.log("submission:",submissions);
+  
+
   const handleLanguageChange = (e)=>{
     const lang = e.target.value;
     setSelectedLanguage(lang)
@@ -82,7 +102,7 @@ const ProblemPage = () => {
     }
   }
 
-  const submissionCount=10
+  
   
 
 
@@ -160,7 +180,7 @@ const ProblemPage = () => {
       case "submissions":
         return (
           <div className="p-4 text-center text-base-content/70">
-            No discussions yet
+            <SubmissionList submissions={submissions} isLoading={isSubmissionsLoading}/>
           </div>
         );
       case "discussion":
