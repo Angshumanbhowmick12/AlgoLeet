@@ -1,4 +1,9 @@
 import axios from "axios"
+import "dotenv/config" 
+
+const headers = {
+  Authorization: `Bearer ${process.env.JUDGE0_API_KEY}`,
+};
 
 const getJudge0LanguageId = (language)=>{
     const languageMap ={
@@ -21,7 +26,8 @@ const pollBatchResults = async (tokens)=>{
             params:{
                 tokens:tokens.join(","),
                 base64_encoded:false,
-            }
+            },
+            headers
         })
 
         const results = data.submissions;
@@ -37,7 +43,8 @@ const pollBatchResults = async (tokens)=>{
 
 const submitBatch= async(submissions)=>{
     const {data} = await axios.post(`${process.env.JUDGE0_API_URL}/submissions/batch?base64_encoded=false`,{
-        submissions
+        submissions,
+        headers
     })
 
     console.log("Submisson Results: ",data);

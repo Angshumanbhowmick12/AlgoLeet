@@ -6,6 +6,9 @@ import { useActions } from '../store/useActions'
 import AddToPlaylistModal from "./AddToPlaylist";
 import CreatePlaylistModal from "./CreatePlaylistModal";
 import { usePlaylistStore } from "../store/usePlaylistStore";
+import { Badge } from './ui/badge'
+import { Button } from './ui/button'
+import { Checkbox } from './ui/checkbox'
 
 const ProblemTable = ({problems}) => {
 
@@ -85,13 +88,13 @@ const ProblemTable = ({problems}) => {
         {/* Header with Create Playlist Button */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">Problems</h2>
-        <button
-          className="btn bg-amber-600 gap-2"
+        <Button
+          className=" bg-amber-600 gap-2"
           onClick={() => setIsCreateModalOpen(true)}
         >
           <Plus className="w-4 h-4" />
           Create Playlist
-        </button>
+        </Button>
       </div>
 
       {/* Filters */}
@@ -100,12 +103,12 @@ const ProblemTable = ({problems}) => {
         <input
           type="text"
           placeholder="Search by title"
-          className="input input-bordered w-full md:w-1/3 bg-base-200"
+          className="input input-bordered w-full md:w-1/3 bg-muted"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
         <select
-          className="select select-bordered bg-base-200"
+          className="select select-bordered bg-muted"
           value={difficulty}
           onChange={(e) => setDifficulty(e.target.value)}
         >
@@ -117,7 +120,7 @@ const ProblemTable = ({problems}) => {
           ))}
         </select>
         <select
-          className="select select-bordered bg-base-200"
+          className="select select-bordered bg-muted"
           value={selectedTag}
           onChange={(e) => setSelectedTag(e.target.value)}
         >
@@ -134,9 +137,9 @@ const ProblemTable = ({problems}) => {
 
       {/* Table  */}
 
-      <div className='overflow-x-auto rounded-xl shadow-md'>
-          <table className='table table-zebra table-lg bg-base-200 text-base-content'>
-            <thead className='bg-base-200'>
+      <div className='overflow-x-auto rounded-xl shadow-2xl dark:shadow-amber-900'>
+          <table className='table  table-lg '>
+            <thead>
               <tr>
               <th>Solved</th>
               <th>Title</th>
@@ -156,11 +159,11 @@ const ProblemTable = ({problems}) => {
                 return (
                   <tr key={problem.id}>
                     <td>
-                      <input
+                      <Checkbox
                         type="checkbox"
                         checked={isSolved}
                         readOnly
-                        className="checkbox checkbox-sm"
+                        className="checkbox checkbox-accent checkbox-sm"
                       />
                     </td>
                       <td>
@@ -174,16 +177,22 @@ const ProblemTable = ({problems}) => {
                         {(problem.tags || []).map((tag, idx) => (
                           <span
                             key={idx}
-                            className="badge badge-outline badge-warning text-xs font-bold"
+                            className=""
                           >
-                            {tag}
+                            <Badge variant="secondary"
+                                className="bg-transparent border-green-500 text-green-500 dark:text-amber-600 dark:border-amber-600"
+ >
+                                {tag}  
+                            </Badge>
+                          
                           </span>
                         ))}
                       </div>
                       </td>
                       <td>
-                         <span
-                        className={`badge font-semibold text-xs text-white ${
+                         <Badge
+                         variant="outline"
+                        className={`badge font-semibold text-xs ${
                           problem.difficulty === "EASY"
                             ? "badge-success"
                             : problem.difficulty === "MEDIUM"
@@ -192,7 +201,7 @@ const ProblemTable = ({problems}) => {
                         }`}
                       >
                         {problem.difficulty}
-                      </span>
+                      </Badge>
                       </td>
                       <td>
                          <div className="flex flex-col md:flex-row gap-2 items-start md:items-center">
@@ -211,13 +220,14 @@ const ProblemTable = ({problems}) => {
                             </button>
                           </div>
                         )}
-                        <button
+                        <Button
+                          variant="outline"
                           className="btn btn-sm btn-outline flex gap-2 items-center"
                           onClick={() => handleAddToPlaylist(problem.id)}
                         >
                           <Bookmark className="w-4 h-4" />
                           <span className="hidden sm:inline">Save to Playlist</span>
-                        </button>
+                        </Button>
                       </div>
                       </td>
                     </tr>

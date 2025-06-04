@@ -8,6 +8,8 @@ export const useAuthStore=create((set)=>({
     isSigninUp: false,
     isloggingIn: false,
     isCheckingAuth: false,
+    isUser:false,
+    isimage:false,
 
     checkAuth: async()=>{
         set({ isCheckingAuth: true});
@@ -69,4 +71,41 @@ export const useAuthStore=create((set)=>({
             
         }
     },
+
+    getUser: async()=>{
+
+        set({isUser:true})
+            try {
+                const res= await axiosInstance.get("/auth/profile")
+
+                set({authUser: res.data.data})
+            } catch (error) {
+                console.log("Error when get user",error);
+                set({authUser:null})
+                
+            }
+            finally{
+                set({ isUser:false})
+            }
+    },
+
+    updateImage: async(image)=>{
+        set({isimage:true})
+
+        try {
+            const res = await axiosInstance.patch("/auth/image",image)
+                console.log("im",image);
+                
+                console.log("data",res.data.data);
+                
+            set({authUser:res.data.data[image]})
+
+        } catch (error) {
+            console.log("Error while update profile ",error);
+            
+        }
+        finally{
+            set({isimage:false})
+        }
+    }
 }))

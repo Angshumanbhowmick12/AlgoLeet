@@ -309,6 +309,20 @@ const updateUserImage = asyncHandler(async(req,res)=>{
         )
 })
 
+const getCurrentUser= asyncHandler(async(req,res)=>{
+    const user= await db.user.findUnique({
+        where:{
+            id:req.user.id
+        }
+    })
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(200,user,"User fetched successfully")
+        )
+})
+
 export {
     register,
     login,
@@ -316,7 +330,8 @@ export {
     check,
     refreshAccessToken,
     changeCurrentPassword,
-    updateUserImage
+    updateUserImage,
+    getCurrentUser,
 }
 
 

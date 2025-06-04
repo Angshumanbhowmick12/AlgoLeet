@@ -3,6 +3,7 @@ import { User, Code, LogOut } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Link } from "react-router-dom";
 import LogoutButton from "./LogoutButton";
+import { ModeToggle } from "./mode-toggle";
 
 
 
@@ -22,11 +23,13 @@ const Navbar = ()=>{
           AlgoLeet 
           </span>
         </Link>
-
+        
         {/* User Profile and Dropdown */}
         <div className="flex items-center gap-8">
+           <ModeToggle/>
           <div className="dropdown dropdown-end">
             <label tabIndex={0} className="btn btn-ghost btn-circle avatar flex flex-row ">
+              
               <div className="w-10 rounded-full ">
                 <img
                   src={
