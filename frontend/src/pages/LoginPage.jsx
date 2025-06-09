@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "react-router-dom";
@@ -7,6 +7,7 @@ import { Code, Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
 import { z } from "zod";
 import AuthImagePattern from "../components/AuthImagePattern";
 import { useAuthStore } from "../store/useAuthStore";
+import { Button } from "../components/ui/button";
 
 const LoginSchema = z.object({
   email: z.string().email("Enter a valid email"),
@@ -16,7 +17,7 @@ const LoginSchema = z.object({
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const {login,isLoggingIn}=useAuthStore()
+  const {checkAuth,login,isLoggingIn}=useAuthStore()
 
   const {
     register,
@@ -35,6 +36,10 @@ const LoginPage = () => {
     }
   };
 
+
+  
+  
+
   return (
     <div className="h-screen grid lg:grid-cols-2">
       <div className="flex flex-col justify-center items-center p-6 sm:p-12">
@@ -42,14 +47,14 @@ const LoginPage = () => {
           {/* logo */}
           <div className="text-center mb-8">
             <div className="flex flex-col items-center gap-2 group">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+              <div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center group-hover:bg-accent transition-colors">
                 <Code className="w-6 h-6 text-amber-600" />
               </div>
               <h1 className="text-2xl font-bold mt-2">
                 {" "}
                 Welcome Back to <span>AlgoLeet</span>
               </h1>
-              <p className="text-base-content/60">Login to your account </p>
+              <p className="">Login to your account </p>
             </div>
           </div>
           {/* Form */}
@@ -63,12 +68,12 @@ const LoginPage = () => {
               </label>
               <div className=" relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-base-content/40" />
+                  <Mail className="h-5 w-5" />
                 </div>
                 <input
                   type="email"
                   {...register("email")}
-                  className={`input input-bordered w-full pl-10 ${
+                  className={`input input-bordered w-full pl-10 bg-accent ${
                     errors.email ? "input-error" : ""
                   }`}
                   placeholder="you@example.com"
@@ -87,12 +92,12 @@ const LoginPage = () => {
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-base-content/40" />
+                  <Lock className="h-5 w-5" />
                 </div>
                 <input
                   type={showPassword ? "text" : "password"}
                   {...register("password")}
-                  className={`input input-bordered w-full pl-10 ${
+                  className={`input input-bordered w-full pl-10 bg-accent ${
                     errors.password ? "input-error" : ""
                   }`}
                   placeholder="••••••••"
@@ -103,9 +108,9 @@ const LoginPage = () => {
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
-                    <EyeOff className="h-5 w-5 text-base-content/40" />
+                    <EyeOff className="h-5 w-5" />
                   ) : (
-                    <Eye className="h-5 w-5 text-base-content/40" />
+                    <Eye className="h-5 w-5" />
                   )}
                 </button>
               </div>
@@ -117,9 +122,9 @@ const LoginPage = () => {
             </div>
 
             {/* Submit Button */}
-            <button
+            <Button variant="outline"
               type="submit"
-              className="btn bg-amber-600 w-full"
+              className=" text-white bg-amber-600 w-full"
              disabled={isLoggingIn}
             >
                {isLoggingIn ? (
@@ -130,11 +135,11 @@ const LoginPage = () => {
               ) : (
                 "Sign in"
               )}
-            </button>
+            </Button>
           </form>
           {/* Footer */}
           <div className="text-center">
-            <p className="text-base-content/60">
+            <p className="">
               Don't have an account?{" "}
               <Link to="/signup" className="link link-primary">
                 Sign up

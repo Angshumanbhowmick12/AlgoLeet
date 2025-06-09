@@ -7,6 +7,7 @@ import { Code, Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
 import { z } from "zod";
 import AuthImagePattern from "../components/AuthImagePattern";
 import { useAuthStore } from "../store/useAuthStore";
+import { Button } from "../components/ui/button";
 
 const SignUpSchema = z.object({
   email: z.string().email("Enter a valid email"),
@@ -43,14 +44,14 @@ const SignUpPage = () => {
           {/* logo */}
           <div className="text-center mb-8">
             <div className="flex flex-col items-center gap-2 group">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center  transition-colors">
                 <Code className="w-6 h-6 text-amber-600" />
               </div>
               <h1 className="text-2xl font-bold mt-2">
                 {" "}
                 Welcome to <span>AlgoLeet</span>
               </h1>
-              <p className="text-base-content/60">Sign Up to your account </p>
+              <p className="">Sign Up to your account </p>
             </div>
           </div>
           {/* Form */}
@@ -62,12 +63,12 @@ const SignUpPage = () => {
               </label>
               <div className=" relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Code className="h-5 w-5 text-base-content/40" />
+                  <Code className="h-5 w-5 " />
                 </div>
                 <input
                   type="text"
                   {...register("name")}
-                  className={`input input-bordered w-full pl-10 ${
+                  className={`input input-bordered w-full pl-10 bg-accent ${
                     errors.name ? "input-error" : ""
                   }`}
                   placeholder="John Doe"
@@ -87,12 +88,12 @@ const SignUpPage = () => {
               </label>
               <div className=" relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-base-content/40" />
+                  <Mail className="h-5 w-5 " />
                 </div>
                 <input
                   type="email"
                   {...register("email")}
-                  className={`input input-bordered w-full pl-10 ${
+                  className={`input input-bordered w-full pl-10 bg-accent ${
                     errors.email ? "input-error" : ""
                   }`}
                   placeholder="you@example.com"
@@ -111,12 +112,12 @@ const SignUpPage = () => {
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-base-content/40" />
+                  <Lock className="h-5 w-5" />
                 </div>
                 <input
                   type={showPassword ? "text" : "password"}
                   {...register("password")}
-                  className={`input input-bordered w-full pl-10 ${
+                  className={`input input-bordered w-full pl-10 bg-accent${
                     errors.password ? "input-error" : ""
                   }`}
                   placeholder="••••••••"
@@ -127,9 +128,9 @@ const SignUpPage = () => {
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
-                    <EyeOff className="h-5 w-5 text-base-content/40" />
+                    <EyeOff className="h-5 w-5 " />
                   ) : (
-                    <Eye className="h-5 w-5 text-base-content/40" />
+                    <Eye className="h-5 w-5" />
                   )}
                 </button>
               </div>
@@ -141,9 +142,9 @@ const SignUpPage = () => {
             </div>
 
             {/* Submit Button */}
-            <button
+            <Button variant="outline"
               type="submit"
-              className="btn bg-amber-600 w-full"
+              className=" bg-amber-600 w-full text-white"
              disabled={isSigninUp}
             >
                {isSigninUp ? (
@@ -154,11 +155,11 @@ const SignUpPage = () => {
               ) : (
                 "Sign in"
               )}
-            </button>
+            </Button>
           </form>
           {/* Footer */}
           <div className="text-center">
-            <p className="text-base-content/60">
+            <p className="">
               Already have an account?{" "}
               <Link to="/login" className="link link-primary">
                 Sign in
@@ -168,6 +169,7 @@ const SignUpPage = () => {
         </div>
       </div>
       <AuthImagePattern
+      
         title={"Welcome to our Platform!"}
         subtitle={"Sign up to access our platform and start using our services."}
       />

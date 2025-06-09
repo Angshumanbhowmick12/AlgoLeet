@@ -12,7 +12,7 @@ const AddToPlaylistModal = ({ isOpen, onClose, problemId }) => {
     }
   }, [isOpen]);
 
-  console.log(playlists);
+  console.log("plad",playlists);
   
 
   const handleSubmit = async (e) => {

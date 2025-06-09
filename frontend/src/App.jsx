@@ -21,6 +21,7 @@ const App = () => {
 
  useEffect(() => {
   checkAuth()
+  
  }, [checkAuth])
 
  console.log(authUser);
@@ -34,7 +35,7 @@ const App = () => {
   )
  }
 
-  return (
+  return ( 
 
 
     <div className="flex flex-col items-center justify-start">

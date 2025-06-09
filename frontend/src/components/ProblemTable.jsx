@@ -264,6 +264,7 @@ const ProblemTable = ({problems}) => {
         >
           Next
         </button>
+        <div className="absolute mask-bottom-left right-0 w-1/3 h-1/3 bg-amber-600 opacity-30 blur-3xl rounded-md zoom-in hover:animate-pulse "/>
       </div>
        {/* Modals */}
       <CreatePlaylistModal
@@ -277,7 +278,7 @@ const ProblemTable = ({problems}) => {
         onClose={() => setIsAddToPlaylistModalOpen(false)}
         problemId={selectedProblemId}
       />
-    <div className="absolute bottom-16 right-0 w-1/3 h-1/3 bg-amber-600 opacity-30 blur-3xl rounded-md"></div>
+    
     </div>
   )
 }

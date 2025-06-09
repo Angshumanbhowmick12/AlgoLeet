@@ -42,7 +42,7 @@ const SubmissionsList = ({ submissions, isLoading }) => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center p-8">
-        <span className="loading loading-spinner loading-lg text-primary"></span>
+        <span className="loading loading-spinner loading-lg text-accent"></span>
       </div>
     );
   }

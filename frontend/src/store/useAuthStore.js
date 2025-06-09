@@ -89,23 +89,26 @@ export const useAuthStore=create((set)=>({
             }
     },
 
-    updateImage: async(image)=>{
-        set({isimage:true})
+     updateImage: async (fileOrFormData) => {
+        set({ isimage: true }); // Set loading state to true
 
         try {
-            const res = await axiosInstance.patch("/auth/image",image)
-                console.log("im",image);
-                
-                console.log("data",res.data.data);
-                
-            set({authUser:res.data.data[image]})
+            const res = await axiosInstance.patch("/auth/image", fileOrFormData);
+
+            
+            set((state) => ({
+                authUser: {
+                    ...state.authUser,
+                    image: res.data.data.image 
+                }
+            }));
+            // ================================
 
         } catch (error) {
-            console.log("Error while update profile ",error);
+            console.error("Error while updating profile image:", error);
             
-        }
-        finally{
-            set({isimage:false})
-        }
-    }
+            throw error;
+        } finally {
+            set({ isimage: false });
+    }}
 }))

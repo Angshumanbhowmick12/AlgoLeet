@@ -1,5 +1,6 @@
 import React,{useState,useEffect} from 'react'
 import { Editor } from '@monaco-editor/react'
+import { useTheme } from '../components/theme-provider'
 import {
      Play,
   FileText,
@@ -23,12 +24,15 @@ import { getLanguageId } from '../lib/lang'
 import Submission from '../components/Submission'
 import SubmissionList from '../components/SubmissionList'
 import { useSubmissionStore } from '../store/useSubmissionStore'
+import { Button } from '../components/ui/button'
 
 const ProblemPage = () => {
 
     const {id}= useParams();
     const {getProblemById , problem, isProblemLoading}= useProblemStore()
+    const {theme}=useTheme()
 
+    const monacoTheme= theme==='dark' ? 'vs-dark' : 'vs'
     const{
       submission:submissions,
       isLoading:isSubmissionsLoading,
@@ -44,7 +48,7 @@ const ProblemPage = () => {
     const [testcases, setTestCases] = useState([]);
 
     const{executeCode,submission,isExecuting}=useExecutionStore()
-
+   
       useEffect(() => {
         getProblemById(id);
         getSubmissionCountForProblem(id)
@@ -108,10 +112,10 @@ const ProblemPage = () => {
 
   if (isProblemLoading || !problem) {
     return(
-      <div className="flex items-center justify-center h-screen bg-base-200">
-        <div className="card bg-base-100 p-8 shadow-xl">
-          <span className="loading loading-spinner loading-lg text-primary"></span>
-          <p className="mt-4 text-base-content/70">Loading problem...</p>
+      <div className="flex items-center justify-center h-screen bg-accent">
+        <div className="card bg-accent p-8 shadow-xl">
+          <span className="loading loading-spinner loading-lg"></span>
+          <p className="mt-4">Loading problem...</p>
         </div>
       </div>
     )
@@ -122,7 +126,7 @@ const ProblemPage = () => {
       case "description":
         return (
           <div className="prose max-w-none">
-            <p className="text-lg mb-6">{problem.description}</p>
+            <p className="text-lg  mb-6">{problem.description}</p>
 
             {problem.examples && (
               <>
@@ -131,30 +135,30 @@ const ProblemPage = () => {
                   ([lang, example], idx) => (
                     <div
                       key={lang}
-                      className="bg-base-200 p-6 rounded-xl mb-6 font-mono"
+                      className="bg-accent p-6 rounded-xl mb-6 font-mono"
                     >
                       <div className="mb-4">
-                        <div className="text-amber-300 mb-2 text-base font-semibold">
+                        <div className="text-amber-500 mb-2  font-semibold">
                           Input:
                         </div>
-                        <span className="bg-black/90 px-4 py-1 rounded-lg font-semibold text-white">
+                        <span className="bg-accent/20 px-4 py-1 rounded-lg font-semibold">
                           {example.input}
                         </span>
                       </div>
                       <div className="mb-4">
-                        <div className="text-amber-300 mb-2 text-base font-semibold">
+                        <div className="text-amber-500 mb-2  font-semibold">
                           Output:
                         </div>
-                        <span className="bg-black/90 px-4 py-1 rounded-lg font-semibold text-white">
+                        <span className="bg-accent px-4 py-1 rounded-lg font-semibold">
                           {example.output}
                         </span>
                       </div>
                       {example.explanation && (
                         <div>
-                          <div className="text-emerald-300 mb-2 text-base font-semibold">
+                          <div className="text-emerald-500 mb-2  font-semibold">
                             Explanation:
                           </div>
-                          <p className="text-base-content/70 text-lg font-sem">
+                          <p className=" text-lg font-sem">
                             {example.explanation}
                           </p>
                         </div>
@@ -168,8 +172,8 @@ const ProblemPage = () => {
             {problem.constraints && (
               <>
                 <h3 className="text-xl font-bold mb-4">Constraints:</h3>
-                <div className="bg-base-200 p-6 rounded-xl mb-6">
-                  <span className="bg-black/90 px-4 py-1 rounded-lg font-semibold text-white text-lg">
+                <div className="bg-accent p-6 rounded-xl mb-6">
+                  <span className="bg-accent px-4 py-1 rounded-lg font-semibold text-lg">
                     {problem.constraints}
                   </span>
                 </div>
@@ -179,13 +183,13 @@ const ProblemPage = () => {
         );
       case "submissions":
         return (
-          <div className="p-4 text-center text-base-content/70">
+          <div className="p-4 text-center ">
             <SubmissionList submissions={submissions} isLoading={isSubmissionsLoading}/>
           </div>
         );
       case "discussion":
         return (
-          <div className="p-4 text-center text-base-content/70">
+          <div className="p-4 text-center ">
             No discussions yet
           </div>
         );
@@ -193,13 +197,13 @@ const ProblemPage = () => {
         return (
           <div className="p-4">
             {problem?.hints ? (
-              <div className="bg-base-200 p-6 rounded-xl">
-                <span className="bg-black/90 px-4 py-1 rounded-lg font-semibold text-white text-lg">
+              <div className="bg-accent p-6 rounded-xl">
+                <span className="bg-accent px-4 py-1 rounded-lg font-semibold text-lg">
                   {problem.hints}
                 </span>
               </div>
             ) : (
-              <div className="text-center text-base-content/70">
+              <div className="text-center ">
                 No hints available
               </div>
             )}
@@ -211,8 +215,8 @@ const ProblemPage = () => {
   };
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-base-300 to-base-200 max-w-dvw w-full'>
-      <nav className="navbar bg-base-100 shadow-lg px-4">
+    <div className='min-h-screen bg-accent from-base-300 to-base-200 max-w-dvw w-full'>
+      <nav className="navbar bg-accent shadow-lg px-4">
         <div className="flex-1 gap-2">
           <Link to={"/"} className="flex items-center gap-2 text-amber-600">
             <Home className="w-6 h-6" />
@@ -220,7 +224,7 @@ const ProblemPage = () => {
           </Link>
           <div className="mt-2">
             <h1 className="text-xl font-bold">{problem.title}</h1>
-            <div className="flex items-center gap-2 text-sm text-base-content/70 mt-5">
+            <div className="flex items-center gap-2 text-sm  mt-5">
               <Clock className="w-4 h-4" />
               <span>
                 Updated{" "}
@@ -242,7 +246,7 @@ const ProblemPage = () => {
         <div className="flex-none gap-4">
           <button
             className={`btn btn-ghost btn-circle ${
-              isBookmarked ? "text-primary" : ""
+              isBookmarked ? "text" : ""
             }`}
             onClick={() => setIsBookmarked(!isBookmarked)}
           >
@@ -252,12 +256,12 @@ const ProblemPage = () => {
             <Share2 className="w-5 h-5" />
           </button>
           <select
-            className="select select-bordered select-primary w-40"
+            className=" select-accent  w-40"
             value={selectedLanguage}
             onChange={handleLanguageChange}
           >
             {Object.keys(problem.codeSnippets || {}).map((lang) => (
-              <option key={lang} value={lang}>
+              <option className='bg-accent'  key={lang} value={lang}>
                 {lang.charAt(0).toUpperCase() + lang.slice(1)}
               </option>
             ))}
@@ -267,11 +271,11 @@ const ProblemPage = () => {
 
       <div className='container mx-auto p-4'>
             <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
-              <div className='card bg-base-100 shadow-xl'>
+              <div className='card bg-accent/20 shadow-xl'>
                 <div className='card-body p-0'>
                   <div className='tabs tabs-bordered'>
                     <button
-                      className={`tab gap-2 ${
+                      className={`tab gap-2 hover:text-amber-700  ${
                       activeTab === "description" ? "tab-active" : ""
                       }`}
                       onClick={() => setActiveTab("description")}
@@ -280,7 +284,7 @@ const ProblemPage = () => {
                       Description
                     </button>
                     <button
-                      className={`tab gap-2 ${
+                      className={`tab gap-2  hover:text-amber-700 ${
                       activeTab === "submissions" ? "tab-active" : ""
                       }`}
                       onClick={() => setActiveTab("submissions")}
@@ -312,11 +316,11 @@ const ProblemPage = () => {
                 </div>
               </div>
             
-                  <div className='card bg-base-100 shadow-xl'>
+                  <div className='card bg-accent shadow-xl'>
                       <div className='card-body p-0'>
-                        <div className='tabs tabs-bordered'>
+                        <div className='tabs text-lg tabs-bordered p-5'>
                             <button>
-                              <Terminal className="w-4 h-4" />
+                              <Terminal className="bg-accent w-4 h-4" />
                                 Code Editor
                             </button>
                         </div>
@@ -324,7 +328,7 @@ const ProblemPage = () => {
                           <Editor
                          height="100%"
                          language={selectedLanguage.toLowerCase()}
-                         theme="vs-dark"
+                         theme={monacoTheme}
                          value={code}
                          onChange={(value) => setCode(value || "")}
                          options={{
@@ -338,10 +342,10 @@ const ProblemPage = () => {
                         }}
                         />
                         </div>
-                        <div className='p-4 border-t border-base-300 bg-base-200'>
+                        <div className='p-4 border-t border-accent bg-accent'>
                           <div className='flex justify-between items-center'>
-                             <button
-                              className={`btn bg-amber-600 gap-2 ${
+                             <Button
+                              className={`bg-amber-600 gap-2 ${
                                 isExecuting ? "loading" : ""
                               }
                                 
@@ -351,10 +355,10 @@ const ProblemPage = () => {
                               >
                               {!isExecuting && <Play className="w-4 h-4" />}
                               Run Code
-                              </button>
-                              <button className="btn btn-success gap-2">
+                              </Button>
+                              <Button className=" bg-green-600 gap-2">
                               Submit Solution
-                              </button>
+                              </Button>
                           </div>
                         </div>
 
@@ -363,7 +367,7 @@ const ProblemPage = () => {
 
             </div>
          
-            <div className="card bg-base-100 shadow-xl mt-6">
+            <div className="card bg-accent/20 shadow-xl mt-6">
                             <div className="card-body">
             {submission ? (
               <Submission submission={submission}/>
@@ -373,7 +377,7 @@ const ProblemPage = () => {
                   <h3 className="text-xl font-bold">Test Cases</h3>
                 </div>
                 <div className="overflow-x-auto">
-                  <table className="table table-zebra w-full">
+                  <table className="table  w-full">
                     <thead>
                       <tr>
                         <th>Input</th>

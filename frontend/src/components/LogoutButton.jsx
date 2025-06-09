@@ -1,5 +1,6 @@
 import React from "react";
 import { useAuthStore } from "../store/useAuthStore";
+import { Button } from "./ui/button";
 
 
 const LogoutButton = ({children})=>{
@@ -13,9 +14,9 @@ const LogoutButton = ({children})=>{
 
 
     return (
-        <button className="btn bg-amber-600" onClick={onLogout}> 
+        <Button className=" bg-amber-600" onClick={onLogout}> 
             {children}
-        </button>
+        </Button>
     )
 }
 

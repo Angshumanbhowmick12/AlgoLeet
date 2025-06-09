@@ -2,6 +2,7 @@ import React from 'react'
 import { useForm,useFieldArray,Controller } from 'react-hook-form'
 import{zodResolver} from "@hookform/resolvers/zod"
 import {z} from "zod"
+import { useTheme } from './theme-provider'
 import {
     Plus,
     Trash2,
@@ -18,6 +19,7 @@ import { useState } from 'react'
 import { axiosInstance } from '../lib/axios'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
+import { Button } from './ui/button'
 
 const problemSchema = z.object({
     title: z.string().min(3, "Title must be at least 3 characters"),
@@ -514,6 +516,8 @@ public class Main {
 
 const CreateProblemForm = () => {
 
+  const { theme }=useTheme()
+const monacoTheme= theme ==="dark" ? "vs-dark" : "vs"
     const[sampleType,setSampleType]=useState("DP")
     const navigation = useNavigate();
     const {register,control,handleSubmit,reset,formState:{errors}}=useForm(
@@ -593,44 +597,47 @@ const loadSampleData=()=>{
 }
 
   return (
-    <div className='container mx-auto py-8 px-4 max-w-7xl'>
-  <div className="card bg-base-100 shadow-xl">
+    <div className='container mx-auto py-8 px-4 w-screen'>
+  <div className="card bg-accent shadow-2xl">
         <div className="card-body p-6 md:p-8">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 md:mb-8 pb-4 border-b">
             <h2 className="card-title text-2xl md:text-3xl flex items-center gap-3">
-              <FileText className="w-6 h-6 md:w-8 md:h-8 text-primary" />
+              <FileText className="w-6 h-6 md:w-8 md:h-8 " />
               Create Problem
             </h2>
 
             <div className="flex flex-col md:flex-row gap-3 mt-4 md:mt-0">
-              <div className="join">
-                <button
+              <div className="gap-2 " >
+                <Button
+                  variant="Outline"
                   type="button"
-                  className={`btn join-item ${
+                  className={`bg-amber-400 gap-2 ${
                     sampleType === "DP" ? "btn-active" : ""
                   }`}
                   onClick={() => setSampleType("array")}
                 >
                   DP Problem
-                </button>
-                <button
+                </Button>
+                <Button
+                  variant="Outline"
                   type="button"
-                  className={`btn join-item ${
+                  className={`bg-amber-400 gap-2 ${
                     sampleType === "string" ? "btn-active" : ""
                   }`}
                   onClick={() => setSampleType("string")}
                 >
                   String Problem
-                </button>
+                </Button>
               </div>
-              <button
+              <Button
+               variant="Outline"
                 type="button"
-                className="btn btn-secondary gap-2"
+                className=" bg-amber-600 text-white gap-2"
                 onClick={loadSampleData}
               >
                 <Download className="w-4 h-4" />
                 Load Sample
-              </button>
+              </Button>
             </div>
           </div>
 
@@ -639,13 +646,13 @@ const loadSampleData=()=>{
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="form-control md:col-span-2">
                 <label className="label">
-                  <span className="label-text text-base md:text-lg font-semibold">
+                  <span className="label-text md:text-lg font-semibold">
                     Title
                   </span>
                 </label>
                 <input
                   type="text"
-                  className="input input-bordered w-full text-base md:text-lg"
+                  className=" bg-accent input-bordered w-full  md:text-lg"
                   {...register("title")}
                   placeholder="Enter problem title"
                 />
@@ -660,12 +667,12 @@ const loadSampleData=()=>{
 
               <div className="form-control md:col-span-2">
                 <label className="label">
-                  <span className="label-text text-base md:text-lg font-semibold">
+                  <span className="label-text md:text-lg font-semibold">
                     Description
                   </span>
                 </label>
                 <textarea
-                  className="textarea textarea-bordered min-h-32 w-full text-base md:text-lg p-4 resize-y"
+                  className=" textarea-bordered min-h-32 w-full md:text-lg p-4 resize-y"
                   {...register("description")}
                   placeholder="Enter problem description"
                 />
@@ -680,12 +687,12 @@ const loadSampleData=()=>{
 
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text text-base md:text-lg font-semibold">
+                  <span className="label-text md:text-lg font-semibold">
                     Difficulty
                   </span>
                 </label>
                 <select
-                  className="select select-bordered w-full text-base md:text-lg"
+                  className=" bg-accent select-bordered w-full text-base md:text-lg"
                   {...register("difficulty")}
                 >
                   <option value="EASY">Easy</option>
@@ -703,7 +710,7 @@ const loadSampleData=()=>{
             </div>
 
             {/* Tags */}
-            <div className="card bg-base-200 p-4 md:p-6 shadow-md">
+            <div className="card bg-accent p-4 md:p-6 shadow-xl">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg md:text-xl font-semibold flex items-center gap-2">
                   <BookOpen className="w-5 h-5" />
@@ -722,7 +729,7 @@ const loadSampleData=()=>{
                   <div key={field.id} className="flex gap-2 items-center">
                     <input
                       type="text"
-                      className="input input-bordered flex-1"
+                      className=" input-bordered flex-1"
                       {...register(`tags.${index}`)}
                       placeholder="Enter tag"
                     />
@@ -747,7 +754,7 @@ const loadSampleData=()=>{
             </div>
 
             {/* Test Cases */}
-            <div className="card bg-base-200 p-4 md:p-6 shadow-md">
+            <div className="card bg-accent p-4 md:p-6 shadow-xl">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg md:text-xl font-semibold flex items-center gap-2">
                   <CheckCircle2 className="w-5 h-5" />
@@ -763,7 +770,7 @@ const loadSampleData=()=>{
               </div>
               <div className="space-y-6">
                 {testCaseFields.map((field, index) => (
-                  <div key={field.id} className="card bg-base-100 shadow-md">
+                  <div key={field.id} className="card bg-accent shadow-md">
                     <div className="card-body p-4 md:p-6">
                       <div className="flex justify-between items-center mb-4">
                         <h4 className="text-base md:text-lg font-semibold">
@@ -786,7 +793,7 @@ const loadSampleData=()=>{
                             </span>
                           </label>
                           <textarea
-                            className="textarea textarea-bordered min-h-24 w-full p-3 resize-y"
+                            className=" textarea-bordered min-h-24 w-full p-3 resize-y"
                             {...register(`testcases.${index}.input`)}
                             placeholder="Enter test case input"
                           />
@@ -805,7 +812,7 @@ const loadSampleData=()=>{
                             </span>
                           </label>
                           <textarea
-                            className="textarea textarea-bordered min-h-24 w-full p-3 resize-y"
+                            className=" textarea-bordered min-h-24 w-full p-3 resize-y"
                             {...register(`testcases.${index}.output`)}
                             placeholder="Enter expected output"
                           />
@@ -836,7 +843,7 @@ const loadSampleData=()=>{
               {["JAVASCRIPT", "PYTHON", "JAVA"].map((language) => (
                 <div
                   key={language}
-                  className="card bg-base-200 p-4 md:p-6 shadow-md"
+                  className="card bg-accent p-4 md:p-6 shadow-md"
                 >
                   <h3 className="text-lg md:text-xl font-semibold mb-6 flex items-center gap-2">
                     <Code2 className="w-5 h-5" />
@@ -845,9 +852,9 @@ const loadSampleData=()=>{
 
                   <div className="space-y-6">
                     {/* Starter Code */}
-                    <div className="card bg-base-100 shadow-md">
+                    <div className="card bg-accent/20 shadow-md">
                       <div className="card-body p-4 md:p-6">
-                        <h4 className="font-semibold text-base md:text-lg mb-4">
+                        <h4 className="font-semibold  md:text-lg mb-4">
                           Starter Code Template
                         </h4>
                         <div className="border rounded-md overflow-hidden">
@@ -858,7 +865,7 @@ const loadSampleData=()=>{
                               <Editor
                                 height="300px"
                                 language={language.toLowerCase()}
-                                theme="vs-dark"
+                                theme={monacoTheme}
                                 value={field.value}
                                 onChange={field.onChange}
                                 options={{
@@ -884,7 +891,7 @@ const loadSampleData=()=>{
                     </div>
 
                     {/* Reference Solution */}
-                    <div className="card bg-base-100 shadow-md">
+                    <div className="card bg-accent/20 shadow-md">
                       <div className="card-body p-4 md:p-6">
                         <h4 className="font-semibold text-base md:text-lg mb-4 flex items-center gap-2">
                           <CheckCircle2 className="w-5 h-5 text-success" />
@@ -898,7 +905,7 @@ const loadSampleData=()=>{
                               <Editor
                                 height="300px"
                                 language={language.toLowerCase()}
-                                theme="vs-dark"
+                                theme={monacoTheme}
                                 value={field.value}
                                 onChange={field.onChange}
                                 options={{
@@ -924,7 +931,7 @@ const loadSampleData=()=>{
                     </div>
 
                     {/* Examples */}
-                    <div className="card bg-base-100 shadow-md">
+                    <div className="card bg-accent/20 shadow-xl">
                       <div className="card-body p-4 md:p-6">
                         <h4 className="font-semibold text-base md:text-lg mb-4">
                           Example
@@ -937,7 +944,7 @@ const loadSampleData=()=>{
                               </span>
                             </label>
                             <textarea
-                              className="textarea textarea-bordered min-h-20 w-full p-3 resize-y"
+                              className="textarea-bordered min-h-20 w-full p-3 resize-y"
                               {...register(`examples.${language}.input`)}
                               placeholder="Example input"
                             />
@@ -956,7 +963,7 @@ const loadSampleData=()=>{
                               </span>
                             </label>
                             <textarea
-                              className="textarea textarea-bordered min-h-20 w-full p-3 resize-y"
+                              className="textarea-bordered min-h-20 w-full p-3 resize-y"
                               {...register(`examples.${language}.output`)}
                               placeholder="Example output"
                             />
@@ -975,7 +982,7 @@ const loadSampleData=()=>{
                               </span>
                             </label>
                             <textarea
-                              className="textarea textarea-bordered min-h-24 w-full p-3 resize-y"
+                              className=" textarea-bordered min-h-24 w-full p-3 resize-y"
                               {...register(`examples.${language}.explanation`)}
                               placeholder="Explain the example"
                             />
@@ -989,7 +996,7 @@ const loadSampleData=()=>{
             </div>
 
             {/* Additional Information */}
-            <div className="card bg-base-200 p-4 md:p-6 shadow-md">
+            <div className="card bg-accent p-4 md:p-6 shadow-xl">
               <h3 className="text-lg md:text-xl font-semibold mb-6 flex items-center gap-2">
                 <Lightbulb className="w-5 h-5 text-warning" />
                 Additional Information
@@ -1000,7 +1007,7 @@ const loadSampleData=()=>{
                     <span className="label-text font-medium">Constraints</span>
                   </label>
                   <textarea
-                    className="textarea textarea-bordered min-h-24 w-full p-3 resize-y"
+                    className=" textarea-bordered min-h-24 w-full p-3 resize-y"
                     {...register("constraints")}
                     placeholder="Enter problem constraints"
                   />
@@ -1019,7 +1026,7 @@ const loadSampleData=()=>{
                     </span>
                   </label>
                   <textarea
-                    className="textarea textarea-bordered min-h-24 w-full p-3 resize-y"
+                    className=" textarea-bordered min-h-24 w-full p-3 resize-y"
                     {...register("hints")}
                     placeholder="Enter hints for solving the problem"
                   />
@@ -1031,7 +1038,7 @@ const loadSampleData=()=>{
                     </span>
                   </label>
                   <textarea
-                    className="textarea textarea-bordered min-h-32 w-full p-3 resize-y"
+                    className=" textarea-bordered min-h-32 w-full p-3 resize-y"
                     {...register("editorial")}
                     placeholder="Enter problem editorial/solution explanation"
                   />
@@ -1040,7 +1047,7 @@ const loadSampleData=()=>{
             </div>
 
             <div className="card-actions justify-end pt-4 border-t">
-              <button type="submit" className="btn btn-primary btn-lg gap-2">
+              <Button type="submit" className=" bg-amber-500 btn-lg gap-2">
                 {isLoading ? (
                   <span className="loading loading-spinner text-white"></span>
                 ) : (
@@ -1049,7 +1056,7 @@ const loadSampleData=()=>{
                     Create Problem
                   </>
                 )}
-              </button>
+              </Button>
             </div>
           </form>
         </div>

@@ -1,6 +1,7 @@
 import React from 'react'
 import {useForm} from "react-hook-form";
 import {X} from "lucide-react";
+import { Button } from './ui/button';
 const CreatePlaylistModal = ({isOpen , onClose , onSubmit}) => {
     const {register , handleSubmit , formState:{errors} , reset} = useForm();
 
@@ -13,9 +14,9 @@ const CreatePlaylistModal = ({isOpen , onClose , onSubmit}) => {
     if(!isOpen) return null;
 
   return (
-   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-base-100 rounded-lg shadow-xl w-full max-w-md">
-        <div className="flex justify-between items-center p-4 border-b border-base-300">
+   <div className="fixed inset-0 bg-muted flex items-center justify-center z-50">
+      <div className="bg-accent/20 rounded-lg shadow-2xl w-full max-w-md">
+        <div className="flex justify-between items-center p-4 border-b border-accent">
           <h3 className="text-xl font-bold">Create New Playlist</h3>
           <button onClick={onClose} className="btn btn-ghost btn-sm btn-circle">
             <X className="w-5 h-5" />
@@ -29,7 +30,7 @@ const CreatePlaylistModal = ({isOpen , onClose , onSubmit}) => {
             </label>
             <input
               type="text"
-              className="input input-bordered w-full"
+              className=" bg-accent input input-bordered w-full"
               placeholder="Enter playlist name"
               {...register('name', { required: 'Playlist name is required' })}
             />
@@ -45,7 +46,7 @@ const CreatePlaylistModal = ({isOpen , onClose , onSubmit}) => {
               <span className="label-text font-medium">Description</span>
             </label>
             <textarea
-              className="textarea textarea-bordered h-24"
+              className="textarea bg-accent textarea-bordered h-24"
               placeholder="Enter playlist description"
               {...register('description')}
             />
@@ -55,9 +56,9 @@ const CreatePlaylistModal = ({isOpen , onClose , onSubmit}) => {
             <button type="button" onClick={onClose} className="btn btn-ghost">
               Cancel
             </button>
-            <button type="submit" className="btn btn-primary">
+            <Button type="submit" className=" bg-amber-600">
               Create Playlist
-            </button>
+            </Button>
           </div>
         </form>
       </div>
