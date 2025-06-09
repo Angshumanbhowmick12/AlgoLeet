@@ -6,6 +6,7 @@ import EditProfile from '../components/EditProfile';
 import { usePlaylistStore } from '../store/usePlaylistStore';
 // Import your Accordion components
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../components/ui/accordion'; 
+import { Link } from 'react-router-dom';
 
 
 const ProfilePage = () => {
@@ -78,6 +79,8 @@ const ProfilePage = () => {
                     </div>
                 </div>
             </div>
+
+            {/* playlist */}
             <div className='mt-5 p-2 md:p-8'>
                 <h3 className="text-xl font-semibold mb-3">Your Playlists</h3>
                 <div>
@@ -105,8 +108,11 @@ const ProfilePage = () => {
                                                         {/* Inner map: Iterate over the problems array specific to THIS playlist */}
                                                         {playlist.problems.map((problemItem) => (
                                                             // Ensure problemItem.id is used for key, and access nested problem details
-                                                            <li key={problemItem.id} className="mb-1 text-sm text-gray-700">
+                                                            <li  key={problemItem.id} className="mb-1 text-sm text-gray-700">
+                                                               <Link to={`/problem/${problemItem.problem.id}`}>
+                                                               
                                                                 {problemItem.problem?.title || 'Unknown Problem'} 
+                                                               </Link>
                                                             </li>
                                                         ))}
                                                     </ul>
