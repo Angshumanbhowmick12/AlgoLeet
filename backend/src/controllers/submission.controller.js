@@ -11,14 +11,39 @@ const getAllSubmission = asyncHandler(async(req,res)=>{
         throw new ApiError(404,"user id is not found")
     }
 
-    const submission=await db.submission.findMany({
+    const submissions=await db.submission.findMany({
         where:{
             userId:userId
         }
     })
 
+    const getProblemDetails = submissions.map(async(submission)=>{
+        const problem=await db.problem.findUnique({
+            where:{
+                id: submission.problemId,
+            },
+            select:{
+                id:true,
+                title:true,
+                difficulty:true,
+                tags:true
+            }
+        })
+
+        const { problemId, ...restSubmissiom}=submission
+        return {
+            ...restSubmissiom,
+            problem,
+        }
+
+        
+
+    })
+    const resolvedSubmissions= await Promise.all(getProblemDetails)
+
+
     res.status(200).json(
-        new ApiResponse(200,submission,"Submissions Fetched Successfully")
+        new ApiResponse(200,resolvedSubmissions,"Submissions Fetched Successfully")
     )
 })
 

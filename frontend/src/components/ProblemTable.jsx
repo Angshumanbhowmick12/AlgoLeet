@@ -103,12 +103,12 @@ const ProblemTable = ({problems}) => {
         <input
           type="text"
           placeholder="Search by title"
-          className="input input-bordered w-full md:w-1/3 bg-muted"
+          className="input-accent border text-foreground/100 p-2 rounded-md  w-full md:w-1/3 bg-background/20 backdrop-blur-sm"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
         <select
-          className="select select-bordered bg-muted"
+          className=" select border text-foreground/100 bg-background/20 backdrop-blur-sm"
           value={difficulty}
           onChange={(e) => setDifficulty(e.target.value)}
         >

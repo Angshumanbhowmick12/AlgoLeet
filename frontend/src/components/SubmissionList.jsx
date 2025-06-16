@@ -59,9 +59,16 @@ const SubmissionsList = ({ submissions, isLoading }) => {
     );
   }
 
+  const sortedSubmissions = [...submissions].sort((a,b)=>{
+    const dateA = new Date(a.createdAt)
+    const dateB = new Date(b.createdAt)
+
+    return dateB.getTime() - dateA.getTime();
+  })
+
   return (
     <div className="space-y-4">
-      {submissions.map((submission) => {
+      {sortedSubmissions.map((submission) => {
         
         const avgMemory = submission.memory === null ? 0 : calculateAverageMemory(submission.memory);
         const avgTime = submission.time === null ? 0 : calculateAverageTime(submission.time);

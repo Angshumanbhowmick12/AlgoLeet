@@ -33,6 +33,7 @@ model User{
   role UserRole @default(USER)
   password String
   refreshToken String?
+  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt 
 
