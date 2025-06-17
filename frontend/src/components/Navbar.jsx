@@ -1,7 +1,7 @@
-import React from "react"
-import { User, Code, LogOut } from "lucide-react";
+import React, { useEffect, useState } from "react"
+import { User, Code, LogOut,UserIcon } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import LogoutButton from "./LogoutButton";
 import { ModeToggle } from "./mode-toggle";
 
@@ -11,11 +11,14 @@ const Navbar = ()=>{
 
     const {authUser} = useAuthStore()
 
-    console.log("AUTH_USER",authUser)
+   const location=useLocation();
+
+   const isActive=(path)=>location.pathname===path
+    
 
     return (
-     <nav className="sticky top-0 z-50 w-full py-5">
-      <div className="flex w-full justify-between mx-auto max-w-4xl bg-black/15 shadow-lg shadow-neutral-600/5 backdrop-blur-lg border border-gray-200/10 p-4 rounded-2xl">
+     <nav className="sticky top-0 z-50 py-5 w-full">
+      <div className="flex w-full max-w-7xl justify-between mx-auto  bg-black/15 shadow-lg shadow-neutral-600/5 backdrop-blur-lg border border-border p-4 rounded-2xl">
         {/* Logo Section */}
         <Link to="/" className="flex items-center gap-3 cursor-pointer">
           <img src="/algoleet.png" className="h-8 w-10" />
@@ -23,11 +26,36 @@ const Navbar = ()=>{
           AlgoLeet 
           </span>
         </Link>
+
+        <div className="hidden md:flex items-center gap-8">
+            <div className="flex items-center gap-6">
+
+              <Link 
+              to="/"
+              className={`text-lg font-medium transition-colors hover:text-amber-500 ${isActive('/') ? 'text-amber-500' : 'text-foreground/60'}`}
+              >
+                Home
+              </Link>
+              <Link 
+              to="/problems"
+              className={`text-lg font-medium transition-colors hover:text-amber-500 ${isActive('/problems') ? 'text-amber-500' : 'text-foreground/60'}`}
+              >
+                Problems
+              </Link>
+              <Link 
+              to="/playlists"
+              className={`text-lg font-medium transition-colors hover:text-amber-500 ${isActive('/playlists') ? 'text-amber-500' : 'text-foreground/60'}`}
+              >
+                Playlists
+              </Link>
+            </div>
+        </div>
         
         {/* User Profile and Dropdown */}
         <div className="flex items-center gap-8">
            <ModeToggle/>
-          <div className="dropdown dropdown-end">
+
+         {authUser?.data ? (<div className="dropdown dropdown-end">
             <label tabIndex={0} className="btn btn-ghost btn-circle avatar flex flex-row ">
               
               <div className="w-10 rounded-full ">
@@ -85,7 +113,10 @@ const Navbar = ()=>{
                 </LogoutButton>
               </li>
             </ul>
-          </div>
+          </div>):(
+            <div></div>
+          )}  
+          
         </div>
       </div>
     </nav>

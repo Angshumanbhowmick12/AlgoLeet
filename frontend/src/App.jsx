@@ -60,7 +60,7 @@ const App = () => {
           path="/profile"
           element={authUser ? <ProfilePage /> : <Navigate to={"/login"} />}
         />
-       </Route>
+       
 
         <Route element={<AdminRoute />}>
           <Route
@@ -68,7 +68,10 @@ const App = () => {
             element={authUser ? <AddProblem /> : <Navigate to="/login" />}
           />
         </Route>
+
+      </Route>
       </Routes>
+      
     </div>
   );
 };

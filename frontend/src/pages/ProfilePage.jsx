@@ -169,7 +169,7 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="from-background to-muted/50 border-border mdp-8 relative mb-2 rounded-2xl border bg-background-to-br w-full h-full">
+    <div className="from-background to-muted/50 border-border mdp-8 relative mb-2 rounded-2xl border bg-transparent w-full">
       <div className="from-background to-muted/50 border-border mdp-8 relative mb-2 overflow-hidden rounded-2xl border bg-gradient-to-br p-2 md:p-8">
         <div className="bg-grid-white/[0.02] absolute inset-0 bg-[size:32px]" />
         <div className="relative flex items-center gap-8">
@@ -223,7 +223,7 @@ const ProfilePage = () => {
                         <div className="relative z-10 flex flex-col items-start md:flex-row md:items-center md:justify-between">
                             {/* Current Streak Number Display */}
                             <div className="flex items-center gap-3 text-primary"> {/* Changed to text-primary */}
-                                <Flame className="h-8 w-8 flex-shrink-0  animate-pulse text-amber-700" />
+                                <Flame className="h-8 w-8 flex-shrink-0  animate-pulse text-amber-600 fill-amber-600 shadow-amber-400 " />
                                 <div>
                                     <span className="text-4xl font-extrabold leading-none">
                                         {streakData.currentStreak}
