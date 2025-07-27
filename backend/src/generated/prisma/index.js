@@ -251,7 +251,7 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
+    "rootEnvPath": "../../../.env",
     "schemaEnvPath": "../../../.env"
   },
   "relativePath": "../../../prisma",
@@ -261,11 +261,12 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
         "fromEnvVar": "NEON_URL",
-        "value": "postgresql://Algoleet_owner:npg_to30dAgOGJlF@ep-billowing-scene-a1e5rkyj-pooler.ap-southeast-1.aws.neon.tech/Algoleet?sslmode=require"
+        "value": null
       }
     }
   },
